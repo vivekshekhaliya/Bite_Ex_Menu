@@ -46,6 +46,8 @@ dependencies:
 
   # Network
   dio: ^5.9.2
+  http: ^1.6.0
+  path_provider: ^2.1.5
   pretty_dio_logger: ^1.4.0
   dio_smart_retry: ^7.0.1
   dio_cache_interceptor: ^4.0.5
@@ -56,6 +58,7 @@ dependencies:
   shimmer_animation: ^2.2.2+1
   cached_network_image: ^3.4.1
   web_socket_channel: ^3.0.3
+  flutter_image_compress: ^2.4.0
 
 dev_dependencies:
   flutter_test:
