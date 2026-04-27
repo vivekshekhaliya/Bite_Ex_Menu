@@ -132,7 +132,7 @@ class WebSocketManager {
       }
     }
 
-    /// ✅ Custom Event: price.updated
+    /// ✅ Custom Event: price.updated (also carries stock field)
     if (event == 'price.updated') {
       try {
         final rawData = data['data'];
@@ -144,12 +144,13 @@ class WebSocketManager {
 
         print("💰 Price Update Received: $price");
 
-        /// 👉 Send clean event to UI
+        /// 👉 Send clean event to UI (includes stock)
         _controller.add({
           "type": "price_updated",
           "product_id": price['product_id'],
           "new_price": price['new_price'],
           "menu_price": price['menu_price'],
+          "stock": price['stock']?.toString(),
         });
       } catch (e) {
         print("❌ Error parsing price.updated: $e");
