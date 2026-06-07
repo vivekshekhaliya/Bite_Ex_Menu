@@ -19,32 +19,37 @@ class MenuScreen extends StatefulWidget {
 }
 
 double getFontSize(int length) {
-  if (length <= 16) return 34;
-  if (length <= 20) return 32;
-  if (length <= 22) return 30;
-  if (length <= 24) return 28;
-  if (length <= 26) return 27;
-  if (length <= 28) return 24;
+  if (length >= 15 && length <= 16) return 34;
+  if (length >= 17 && length <= 18) return 34;
+  if (length >= 19 && length <= 20) return 32;
+  if (length >= 21 && length <= 22) return 30;
+  if (length >= 23 && length <= 24) return 28;
+  if (length >= 25 && length <= 26) return 28;
+  if (length >= 27 && length <= 28) return 27;
+  if (length >= 29 && length <= 30) return 24;
   return 24;
 }
 
 double getImageHeight(int length) {
-  if (length <= 16) return 140;
-  if (length <= 20) return 120;
-  if (length <= 22) return 120;
-  if (length <= 24) return 110;
-  if (length <= 26) return 110;
-  if (length <= 28) return 100;
+  if (length >= 15 && length <= 16) return 140;
+  if (length >= 17 && length <= 18) return 140;
+  if (length >= 19 && length <= 20) return 140;
+  if (length >= 17 && length <= 20) return 180;
+  if (length >= 21 && length <= 22) return 126;
+  if (length >= 23 && length <= 24) return 120;
+  if (length >= 25 && length <= 26) return 110;
+  if (length >= 27 && length <= 28) return 100;
   return 110;
 }
 
 double getChildRatio(int length) {
-  if (length <= 16) return 3.6;
-  if (length <= 20) return 4.8;
-  if (length <= 22) return 4.2;
-  if (length <= 24) return 4.7;
-  if (length <= 26) return 4.8;
-  if (length <= 28) return 5.6;
+  if (length >= 15 && length <= 16) return 3.0;
+  if (length >= 17 && length <= 18) return 3.0;
+  if (length >= 19 && length <= 20) return 4.0;
+  if (length >= 21 && length <= 22) return 4.0;
+  if (length >= 23 && length <= 24) return 4.4;
+  if (length >= 25 && length <= 26) return 4.8;
+  if (length >= 27 && length <= 28) return 5.6;
   return 5.2;
 }
 
@@ -122,6 +127,29 @@ class _MenuScreenState extends State<MenuScreen> {
                     return categoryBlock(cat, totalLength);
                   }).toList(),
                 ),
+
+                if (pageId == 1)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.only(top: 24, bottom: 20),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: AppColors.whiteColor),
+                        ),
+                      ),
+                      child: Center(
+                        child: CustomText(
+                          data: '*GST Applicable On All Items',
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
     );
@@ -198,24 +226,23 @@ class _MenuScreenState extends State<MenuScreen> {
       child: Row(
         children: [
           /// 🔥 IMAGE
-          Opacity(
-            opacity: product.stock == '0' ? 0.37 : 1,
-            child: ClipRRect(
-              borderRadius: BorderRadiusGeometry.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
-              child: AppCachedNetworkImage(
-                imageUrl:
-                    "https://site.biteexchange.com/build/assets/product_image/${product.image}",
-                height: getImageHeight(totalLength),
-                width: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 12),
+          // Opacity(
+          //   opacity: product.stock == '0' ? 0.37 : 1,
+          //   child: ClipRRect(
+          //     borderRadius: BorderRadiusGeometry.only(
+          //       topLeft: Radius.circular(10),
+          //       bottomLeft: Radius.circular(10),
+          //     ),
+          //     child: AppCachedNetworkImage(
+          //       imageUrl:
+          //           "https://site.biteexchange.com/build/assets/product_image/${product.image}",
+          //       height: getImageHeight(totalLength),
+          //       width: 110,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
+          const SizedBox(width: 20),
 
           /// 🔥 TEXT
           Expanded(

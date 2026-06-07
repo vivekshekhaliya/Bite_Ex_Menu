@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
 
     socket.subscribe("price-channel");
 
-    // SharedPrefService.clearPref('token');
+    SharedPrefService.clearPref('token');
   }
 
   @override
@@ -78,8 +78,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _handleConnectivityChange(
-      List<ConnectivityResult> result,
-      ) async {
+    List<ConnectivityResult> result,
+  ) async {
     final hasInternet = await _hasInternetConnection();
     if (result.first == ConnectivityResult.none && !hasInternet) {
       if (!_isDialogVisible) {

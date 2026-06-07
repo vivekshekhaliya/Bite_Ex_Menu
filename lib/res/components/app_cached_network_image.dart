@@ -49,7 +49,7 @@ class _AppCachedNetworkImageState extends State<AppCachedNetworkImage> {
       final result = await FlutterImageCompress.compressAndGetFile(
         file.absolute.path,
         '${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg',
-        quality: 40, // 🔥 adjust (40–70 best)
+        quality: 70, // 🔥 adjust (40–70 best)
       );
 
       if (result != null && mounted) {
