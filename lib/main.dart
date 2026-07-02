@@ -21,7 +21,16 @@ import 'data/network/api_client.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   ApiClient.init();
 
@@ -68,7 +77,7 @@ class _MyAppState extends State<MyApp> {
 
     socket.subscribe("price-channel");
 
-    SharedPrefService.clearPref('token');
+    // SharedPrefService.clearPref('token');
   }
 
   @override
