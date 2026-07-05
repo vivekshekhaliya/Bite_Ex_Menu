@@ -45,8 +45,8 @@ double getImageHeight(int length) {
 double getChildRatio(int length) {
   if (length >= 15 && length <= 16) return 3.0;
   if (length >= 17 && length <= 18) return 3.0;
-  if (length >= 19 && length <= 20) return 4.0;
-  if (length >= 21 && length <= 22) return 4.0;
+  if (length >= 19 && length <= 20) return 4.1;
+  if (length >= 21 && length <= 22) return 4.2;
   if (length >= 23 && length <= 24) return 4.4;
   if (length >= 25 && length <= 26) return 4.8;
   if (length >= 27 && length <= 28) return 5.6;
@@ -267,16 +267,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           /// PRICE
                           Builder(
                             builder: (context) {
-                              double currentP =
-                                  double.tryParse(product.price) ?? 0;
-                              double menuP =
-                                  double.tryParse(product.menuPrice) ?? 0;
-                              double difference = currentP - menuP;
-                              Color diffColor = difference > 0
-                                  ? AppColors.crimsonRedColor
-                                  : (difference < 0
-                                        ? AppColors.primaryColor
-                                        : AppColors.whiteColor);
+                              Color diffColor = AppColors.parsePriceColor(product.priceColor, fallback: AppColors.whiteColor);
                               return AppCustomFlipText(
                                 value: num.parse(product.price),
                                 prefix: '₹',
@@ -300,11 +291,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
                               double difference = currentP - menuP;
 
-                              Color diffColor = difference > 0
-                                  ? AppColors.crimsonRedColor
-                                  : (difference < 0
-                                        ? AppColors.primaryColor
-                                        : AppColors.coolGrayColor);
+                              Color diffColor = AppColors.parsePriceColor(product.priceColor, fallback: AppColors.coolGrayColor);
 
                               String sign = difference > 0
                                   ? '+ '

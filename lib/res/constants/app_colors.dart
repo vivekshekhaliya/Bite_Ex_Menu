@@ -21,4 +21,32 @@ class AppColors {
   static const Color orangeColor = Color(0xFFEF7C09);
   static const Color coolGrayBlueColor = Color(0xFF667085);
   static const Color lightCoolGrayColor = Color(0xFFB7B8BC);
+
+  static Color parsePriceColor(String? colorStr, {Color fallback = coolGrayColor}) {
+    if (colorStr == null || colorStr.isEmpty) {
+      return fallback;
+    }
+    final cleanStr = colorStr.trim().toLowerCase();
+    if (cleanStr == 'red' || cleanStr == 'crimson' || cleanStr.contains('red')) {
+      return crimsonRedColor;
+    }
+    if (cleanStr == 'green' || cleanStr == 'primary' || cleanStr.contains('green')) {
+      return primaryColor;
+    }
+    if (cleanStr == 'gray' || cleanStr == 'grey' || cleanStr.contains('gray') || cleanStr.contains('grey')) {
+      return fallback;
+    }
+    try {
+      String hexColor = cleanStr.replaceAll('#', '');
+      if (hexColor.length == 6) {
+        hexColor = 'FF$hexColor';
+      }
+      if (hexColor.startsWith('0x')) {
+        hexColor = hexColor.substring(2);
+      }
+      return Color(int.parse(hexColor, radix: 16));
+    } catch (_) {
+      return fallback;
+    }
+  }
 }

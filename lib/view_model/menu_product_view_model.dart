@@ -52,9 +52,10 @@ class MenuProductViewModel with ChangeNotifier {
         final newPrice = event['new_price']?.toString();
         final menuPrice = event['menu_price']?.toString();
         final stock = event['stock']?.toString(); // 📦 stock comes with price
+        final priceColor = event['price_color']?.toString();
 
         if (productId != null && newPrice != null && menuPrice != null) {
-          _updateProductPrice(productId, newPrice, menuPrice, stock: stock);
+          _updateProductPrice(productId, newPrice, menuPrice, stock: stock, priceColor: priceColor);
         }
       }
 
@@ -73,7 +74,7 @@ class MenuProductViewModel with ChangeNotifier {
   }
 
 
-  void _updateProductPrice(dynamic productId, String newPrice, String menuPrice, {String? stock}) {
+  void _updateProductPrice(dynamic productId, String newPrice, String menuPrice, {String? stock, String? priceColor}) {
     final int targetId = productId is int
         ? productId
         : int.tryParse(productId.toString()) ?? -1;
@@ -88,6 +89,7 @@ class MenuProductViewModel with ChangeNotifier {
           if (product.id == targetId) {
             product.price = newPrice;
             product.menuPrice = menuPrice;
+            product.priceColor = priceColor;
             /// 📦 Update stock if provided ("Available" → normal, "0" → NA)
             if (stock != null) product.stock = stock;
             updated = true;

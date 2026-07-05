@@ -151,6 +151,7 @@ class WebSocketManager {
           "new_price": price['new_price'],
           "menu_price": price['menu_price'],
           "stock": price['stock']?.toString(),
+          "price_color": price['price_color'],
         });
       } catch (e) {
         print("❌ Error parsing price.updated: $e");

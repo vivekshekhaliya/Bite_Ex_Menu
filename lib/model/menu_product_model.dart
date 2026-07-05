@@ -65,6 +65,7 @@ class Product {
   String? name;
   String? price;
   String? menuPrice;
+  String? priceColor;
   String? image;
   int? categoryId;
   int? isAvailable;
@@ -74,6 +75,7 @@ class Product {
     this.name,
     this.price,
     this.menuPrice,
+    this.priceColor,
     this.image,
     this.categoryId,
     this.isAvailable,
@@ -85,6 +87,7 @@ class Product {
     name: json["name"],
     price: json["price"],
     menuPrice: json["menu_price"],
+    priceColor: json["price_color"],
     image: json["image"],
     categoryId: json["category_id"],
     isAvailable: json["is_available"],
@@ -96,6 +99,7 @@ class Product {
     "name": name,
     "price": price,
     "menu_price": menuPrice,
+    "price_color": priceColor,
     "image": image,
     "category_id": categoryId,
     "is_available": isAvailable,
