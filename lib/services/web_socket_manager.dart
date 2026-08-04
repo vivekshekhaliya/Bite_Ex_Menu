@@ -144,7 +144,7 @@ class WebSocketManager {
 
         print("💰 Price Update Received: $price");
 
-        /// 👉 Send clean event to UI (includes stock)
+        /// 👉 Send clean event to UI (includes stock and highlight_product)
         _controller.add({
           "type": "price_updated",
           "product_id": price['product_id'],
@@ -152,9 +152,31 @@ class WebSocketManager {
           "menu_price": price['menu_price'],
           "stock": price['stock']?.toString(),
           "price_color": price['price_color'],
+          "highlight_product": price['highlight_product'],
         });
       } catch (e) {
         print("❌ Error parsing price.updated: $e");
+      }
+    }
+
+    /// ✅ Custom Event: highlight.updated
+    if (event == 'highlight.updated') {
+      try {
+        final rawData = data['data'];
+        final parsedData = rawData is String ? jsonDecode(rawData) : rawData;
+        print("💡 Highlight Update Received: $parsedData");
+        
+        final highlight = parsedData['highlight'];
+        final productId = parsedData['product_id'] ?? (highlight != null ? highlight['product_id'] : null);
+        final highlightProduct = parsedData['highlight_product'] ?? (highlight != null ? highlight['highlight_product'] : null);
+        
+        _controller.add({
+          "type": "highlight_updated",
+          "product_id": productId,
+          "highlight_product": highlightProduct,
+        });
+      } catch (e) {
+        print("❌ Error parsing highlight.updated: $e");
       }
     }
 

@@ -47,23 +47,43 @@ class MenuProductViewModel with ChangeNotifier {
     _socketSubscription?.cancel();
 
     _socketSubscription = WebSocketManager().stream.listen((event) {
-      if (event is Map && event['type'] == 'price_updated') {
-        final productId = event['product_id'];
-        final newPrice = event['new_price']?.toString();
-        final menuPrice = event['menu_price']?.toString();
-        final stock = event['stock']?.toString(); // 📦 stock comes with price
-        final priceColor = event['price_color']?.toString();
+      if (event is Map) {
+        if (event['type'] == 'price_updated') {
+          final productId = event['product_id'];
+          final newPrice = event['new_price']?.toString();
+          final menuPrice = event['menu_price']?.toString();
+          final stock = event['stock']?.toString(); // 📦 stock comes with price
+          final priceColor = event['price_color']?.toString();
+          final highlightProduct = event['highlight_product'];
 
-        if (productId != null && newPrice != null && menuPrice != null) {
-          _updateProductPrice(productId, newPrice, menuPrice, stock: stock, priceColor: priceColor);
+          if (productId != null) {
+            _updateProduct(
+              productId,
+              newPrice: newPrice,
+              menuPrice: menuPrice,
+              stock: stock,
+              priceColor: priceColor,
+              highlightProduct: highlightProduct,
+            );
+          }
+        } else if (event['type'] == 'highlight_updated') {
+          final productId = event['product_id'];
+          final highlightProduct = event['highlight_product'];
+
+          if (productId != null) {
+            _updateProduct(
+              productId,
+              highlightProduct: highlightProduct,
+            );
+          }
         }
-      }
 
-      /// 🚨 Market crash
-      if (event is Map && event['type'] == 'market_crashed') {
-        if (!_isCrashShown) {
-          _isCrashShown = true;
-          onMarketCrashed?.call();
+        /// 🚨 Market crash
+        if (event['type'] == 'market_crashed') {
+          if (!_isCrashShown) {
+            _isCrashShown = true;
+            onMarketCrashed?.call();
+          }
         }
       }
     });
@@ -74,7 +94,14 @@ class MenuProductViewModel with ChangeNotifier {
   }
 
 
-  void _updateProductPrice(dynamic productId, String newPrice, String menuPrice, {String? stock, String? priceColor}) {
+  void _updateProduct(
+    dynamic productId, {
+    String? newPrice,
+    String? menuPrice,
+    String? stock,
+    String? priceColor,
+    dynamic highlightProduct,
+  }) {
     final int targetId = productId is int
         ? productId
         : int.tryParse(productId.toString()) ?? -1;
@@ -87,11 +114,17 @@ class MenuProductViewModel with ChangeNotifier {
       for (var category in _menuProduct!.data!) {
         for (var product in category.products ?? []) {
           if (product.id == targetId) {
-            product.price = newPrice;
-            product.menuPrice = menuPrice;
-            product.priceColor = priceColor;
-            /// 📦 Update stock if provided ("Available" → normal, "0" → NA)
+            if (newPrice != null) product.price = newPrice;
+            if (menuPrice != null) product.menuPrice = menuPrice;
+            if (priceColor != null) product.priceColor = priceColor;
             if (stock != null) product.stock = stock;
+            if (highlightProduct != null) {
+              product.highlightProduct = highlightProduct is bool
+                  ? highlightProduct
+                  : (highlightProduct == 1 ||
+                      highlightProduct == '1' ||
+                      highlightProduct.toString().toLowerCase() == 'true');
+            }
             updated = true;
           }
         }

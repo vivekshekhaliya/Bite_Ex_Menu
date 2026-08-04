@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:menu/res/components/app_cached_network_image.dart';
 import 'package:menu/res/components/custom_text.dart';
 import 'package:menu/res/components/not_found.dart';
 import 'package:menu/res/constants/app_colors.dart';
@@ -219,29 +218,16 @@ class _MenuScreenState extends State<MenuScreen> {
       decoration: BoxDecoration(
         color: product.stock == '0'
             ? AppColors.darkGunmetalColor.withAlpha(100)
+            : product.highlightProduct == true
+            ? AppColors.crimsonRedColor.withAlpha(20)
             : AppColors.darkGunmetalColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white24),
+        border: product.highlightProduct == true
+            ? Border.all(color: AppColors.crimsonRedColor, width: 2.0)
+            : Border.all(color: AppColors.whiteColor.withAlpha(80), width: 2.0),
       ),
       child: Row(
         children: [
-          /// 🔥 IMAGE
-          // Opacity(
-          //   opacity: product.stock == '0' ? 0.37 : 1,
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadiusGeometry.only(
-          //       topLeft: Radius.circular(10),
-          //       bottomLeft: Radius.circular(10),
-          //     ),
-          //     child: AppCachedNetworkImage(
-          //       imageUrl:
-          //           "https://site.biteexchange.com/build/assets/product_image/${product.image}",
-          //       height: getImageHeight(totalLength),
-          //       width: 110,
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
           const SizedBox(width: 20),
 
           /// 🔥 TEXT
@@ -267,7 +253,10 @@ class _MenuScreenState extends State<MenuScreen> {
                           /// PRICE
                           Builder(
                             builder: (context) {
-                              Color diffColor = AppColors.parsePriceColor(product.priceColor, fallback: AppColors.whiteColor);
+                              Color diffColor = AppColors.parsePriceColor(
+                                product.priceColor,
+                                fallback: AppColors.whiteColor,
+                              );
                               return AppCustomFlipText(
                                 value: num.parse(product.price),
                                 prefix: '₹',
@@ -291,7 +280,10 @@ class _MenuScreenState extends State<MenuScreen> {
 
                               double difference = currentP - menuP;
 
-                              Color diffColor = AppColors.parsePriceColor(product.priceColor, fallback: AppColors.coolGrayColor);
+                              Color diffColor = AppColors.parsePriceColor(
+                                product.priceColor,
+                                fallback: AppColors.coolGrayColor,
+                              );
 
                               String sign = difference > 0
                                   ? '+ '

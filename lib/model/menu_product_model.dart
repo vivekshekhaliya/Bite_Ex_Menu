@@ -70,6 +70,7 @@ class Product {
   int? categoryId;
   int? isAvailable;
   String? stock;
+  bool? highlightProduct;
   Product({
     this.id,
     this.name,
@@ -80,6 +81,7 @@ class Product {
     this.categoryId,
     this.isAvailable,
     this.stock,
+    this.highlightProduct,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -92,6 +94,13 @@ class Product {
     categoryId: json["category_id"],
     isAvailable: json["is_available"],
     stock: json['stock'],
+    highlightProduct: json["highlight_product"] == null
+        ? false
+        : (json["highlight_product"] is bool
+            ? json["highlight_product"]
+            : (json["highlight_product"] == 1 ||
+                json["highlight_product"] == '1' ||
+                json["highlight_product"].toString().toLowerCase() == 'true')),
   );
 
   Map<String, dynamic> toJson() => {
@@ -104,5 +113,6 @@ class Product {
     "category_id": categoryId,
     "is_available": isAvailable,
     "stock": stock,
+    "highlight_product": highlightProduct,
   };
 }

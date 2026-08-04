@@ -56,9 +56,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   shared_preferences: ^2.5.4
   shimmer_animation: ^2.2.2+1
-  cached_network_image: ^3.4.1
   web_socket_channel: ^3.0.3
-  flutter_image_compress: ^2.4.0
 
 dev_dependencies:
   flutter_test:
