@@ -26,19 +26,7 @@ double getFontSize(int length) {
   if (length >= 25 && length <= 26) return 28;
   if (length >= 27 && length <= 28) return 27;
   if (length >= 29 && length <= 30) return 24;
-  return 24;
-}
-
-double getImageHeight(int length) {
-  if (length >= 15 && length <= 16) return 140;
-  if (length >= 17 && length <= 18) return 140;
-  if (length >= 19 && length <= 20) return 140;
-  if (length >= 17 && length <= 20) return 180;
-  if (length >= 21 && length <= 22) return 126;
-  if (length >= 23 && length <= 24) return 120;
-  if (length >= 25 && length <= 26) return 110;
-  if (length >= 27 && length <= 28) return 100;
-  return 110;
+  return 26;
 }
 
 double getChildRatio(int length) {
@@ -46,9 +34,9 @@ double getChildRatio(int length) {
   if (length >= 17 && length <= 18) return 3.0;
   if (length >= 19 && length <= 20) return 4.1;
   if (length >= 21 && length <= 22) return 4.2;
-  if (length >= 23 && length <= 24) return 4.4;
-  if (length >= 25 && length <= 26) return 4.8;
-  if (length >= 27 && length <= 28) return 5.6;
+  if (length >= 23 && length <= 24) return 4.6;
+  if (length >= 25 && length <= 26) return 5.2;
+  if (length >= 27 && length <= 28) return 5.8;
   return 5.2;
 }
 

@@ -60,16 +60,25 @@ class _MyAppState extends State<MyApp> {
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   bool _isDialogVisible = false;
 
+  // Internet status
+  bool _isOffline = false;
+
   final socket = WebSocketManager();
 
   @override
   void initState() {
     super.initState();
     _connectivity = Connectivity();
+
+    // Check internet when app starts
+    _checkInitialInternetConnection();
+
+    // Listen internet changes
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
       _handleConnectivityChange,
     );
 
+    // Socket connection
     socket.connect(AppUrl.socketUrl);
 
     socket.stream.listen((event) {
@@ -81,36 +90,50 @@ class _MyAppState extends State<MyApp> {
     // SharedPrefService.clearPref('token');
   }
 
-  @override
-  void dispose() {
-    _connectivitySubscription.cancel();
-    super.dispose();
+  /// Check initial internet connection
+  Future<void> _checkInitialInternetConnection() async {
+    final hasInternet = await _hasInternetConnection();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isOffline = !hasInternet;
+    });
   }
 
+  /// Handle connectivity changes
   Future<void> _handleConnectivityChange(
     List<ConnectivityResult> result,
   ) async {
     final hasInternet = await _hasInternetConnection();
-    if (result.first == ConnectivityResult.none && !hasInternet) {
-      if (!_isDialogVisible) {
-        _showInternetDialog(navigatorKey.currentContext);
-        _isDialogVisible = true;
-      }
-    } else {
-      if (_isDialogVisible) {
-        Navigator.of(navigatorKey.currentContext!, rootNavigator: true).pop();
-        _isDialogVisible = false;
-      }
-    }
+
+    if (!mounted) return;
+
+    final isDisconnected =
+        result.isEmpty ||
+        result.contains(ConnectivityResult.none) ||
+        !hasInternet;
+
+    setState(() {
+      _isOffline = isDisconnected;
+    });
   }
 
+  /// Check actual internet access
   Future<bool> _hasInternetConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
+
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -144,6 +167,80 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           initialRoute: RoutesName.splash,
           onGenerateRoute: Routes.generateRoute,
+
+          /// 🔥 Bottom Internet Banner
+          builder: (context, child) {
+            return Stack(
+              children: [
+                // Main App Screens
+                child ?? const SizedBox(),
+
+                // Internet Offline Banner
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: IgnorePointer(
+                    ignoring: !_isOffline,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      offset: _isOffline ? Offset.zero : const Offset(0, 2),
+
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        opacity: _isOffline ? 1 : 0,
+
+                        child: SafeArea(
+                          top: false,
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 15,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade700,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.wifi_off_rounded,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                                SizedBox(width: 10),
+                                CustomText(
+                                  data: 'No Internet Connection',
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
