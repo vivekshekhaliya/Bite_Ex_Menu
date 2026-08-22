@@ -31,7 +31,7 @@ double getFontSize(int length) {
 
 double getChildRatio(int length) {
   if (length >= 15 && length <= 16) return 3.0;
-  if (length >= 17 && length <= 18) return 3.0;
+  if (length >= 17 && length <= 18) return 3.5;
   if (length >= 19 && length <= 20) return 4.1;
   if (length >= 21 && length <= 22) return 4.2;
   if (length >= 23 && length <= 24) return 4.6;
